@@ -90,7 +90,7 @@ void display_text(char* text, int * int_value, int divisor) {
   tft.println(F(text));
 
   char str_buf[5];
-  sprintf(str_buf, "%lf", (double)(*int_value)/divisor);
+  sprintf(str_buf, "%.1lf", (double)(*int_value)/divisor);
   tft.println(F(str_buf));
 
   // Get the bounds of the text that was displayed above.
