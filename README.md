@@ -7,7 +7,7 @@ o.spark_advance
 o.baro
 o.map
 o.mat
-o.clnt_temp
+o.clnt_temp - Fahrenheit
 o.tps 
 o.batt 
 o.oil_press - PSI
