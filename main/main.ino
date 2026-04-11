@@ -28,6 +28,7 @@ char high_coolant_temp_warning[] = "HIGH\nCOOL\nTEMP";
 int oil_pressure = 110;   //update with real variable
 int coolant_temp = 200; //update with real variable
 int battery_voltage = 12;   //update with real variable
+int rpm = 500; //update with real variables
 
 
 const int BUTTON_PIN = 2; //update with real pin number
@@ -117,17 +118,38 @@ void loop() {
 
 // ---------------------- Warning logic ----------------------
 
+float getMinOilPressure(int rpm) {
+
+    if (rpm <= 500) return 15;
+
+    else if (rpm <= 2000) return 15;
+
+    else if (rpm <= 4000) return 17;
+
+    else if (rpm <= 6000) return 20;
+
+    else if (rpm <= 8000) return 25;
+
+    else if (rpm <= 10000) return 27;
+
+    return 32; // above 10k
+}
+
+
 void checkAndEnqueueWarnings() {
-  // Low oil pressure (< 100 kPa) -> YELLOW
-  if (oil_pressure < 100) {
+
+  float minOil = getMinOilPressure(rpm);
+
+  // Low oil pressure ( based on rpm) -> YELLOW
+  if (oil_pressure < minOil) {
     if (!isWarningAlreadyQueued(low_oil_pressure_warning) &&
         !isCurrentWarning(low_oil_pressure_warning)) {
       warningQueue[queueCount++] = { low_oil_pressure_warning, &oil_pressure, ST77XX_YELLOW };
     }
   }
 
-  // High oil pressure (> 550 kPa) -> ORANGE
-  if (oil_pressure > 550) {
+  // High oil pressure (> 550 kPa/ 80 psi) -> ORANGE
+  if (oil_pressure > 80) {
     if (!isWarningAlreadyQueued(high_oil_pressure_warning) &&
         !isCurrentWarning(high_oil_pressure_warning)) {
       warningQueue[queueCount++] = { high_oil_pressure_warning, &oil_pressure, ST77XX_ORANGE };
@@ -205,10 +227,13 @@ void processWarnings() {
 
 
 bool isWarningConditionActive(const WarningEvent& w) {
+
+  float minOil = getMinOilPressure(rpm);
+
   if (w.text == low_oil_pressure_warning) {
-    return (*w.value < 100);
+    return (*w.value < minOil);
   } else if (w.text == high_oil_pressure_warning) {
-    return (*w.value > 550);
+    return (*w.value > 80);
   } else if (w.text == high_coolant_temp_warning) {
     return (*w.value > 230);
   }
