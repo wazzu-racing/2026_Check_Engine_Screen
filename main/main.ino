@@ -25,7 +25,7 @@ char low_oil_pressure_warning[] = "LOW OIL\nPRESSURE";
 char high_oil_pressure_warning[] = "HIGH OIL\nPRESSURE";
 char high_coolant_temp_warning[] = "HIGH\nCOOL\nTEMP";
 
-int oil_pressure = 90;   //update with real variable
+int oil_pressure = 110;   //update with real variable
 int coolant_temp = 200; //update with real variable
 int battery_voltage = 12;   //update with real variable
 
@@ -234,16 +234,19 @@ void showHomeScreen() {
 
   tft.setCursor(0, 0);
   tft.setTextColor(ST77XX_WHITE);
-  tft.setTextSize(5);
+  tft.setTextSize(6);
 
-  tft.println("Battery:");
+  tft.print("Vltg: ");
   tft.println(battery_voltage);
 
-  tft.println("Oil:");
+  tft.setCursor(0, 90);
+  tft.print("Oil:  ");
   tft.println(oil_pressure);
 
-  tft.println("Coolant:");
+  tft.setCursor(0, 180);
+  tft.print("Clnt: ");
   tft.println(coolant_temp);
+
 }
 
 void updateHomeScreen() {
@@ -259,16 +262,19 @@ void updateHomeScreen() {
     tft.fillScreen(ST77XX_BLACK);
     tft.setCursor(0, 0);
     tft.setTextColor(ST77XX_WHITE);
-    tft.setTextSize(5);   // your chosen size
+    tft.setTextSize(6);   // your chosen size
 
-    tft.print("Batt: ");
+    tft.print("Vltg: ");
     tft.println(battery_voltage);
 
-    tft.print("Oil: ");
+    tft.setCursor(0, 90);
+    tft.print("Oil:  ");
     tft.println(oil_pressure);
 
-    tft.print("Cool: ");
+    tft.setCursor(0, 180);
+    tft.print("Clnt: ");
     tft.println(coolant_temp);
+
 
     lastBattery = battery_voltage;
     lastOil = oil_pressure;
